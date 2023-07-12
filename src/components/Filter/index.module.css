@@ -1,0 +1,11 @@
+.wrapper {
+    width: 90%;
+    height: 150px;
+    background-color: blue;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 90px;
+  }

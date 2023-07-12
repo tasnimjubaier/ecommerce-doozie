@@ -1,0 +1,13 @@
+{
+    "rakuten_query_parameters": {
+      "keyword": "shirt",
+      "page": 1,
+      "hits": 2
+    },
+    "yahoo_query_parameters": {
+      "query": "shirt",
+      "results": 2,
+      "start": 1
+    },
+    "from_scheduler": false
+  }
