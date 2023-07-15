@@ -1,11 +1,42 @@
 .wrapper {
-    width: 90%;
-    height: 150px;
-    background-color: blue;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 90px;
-  }
+  width: 90%;
+  background-color: rgb(187, 186, 186);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  margin: 20px 90px;
+
+  overflow: hidden;
+  transition: .3s;
+}
+
+
+.options {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-evenly; */
+}
+
+.priceRange {
+  width: 25%;
+  margin: 20px;
+  align-self: right;
+  /* background-color: brown; */
+}
+
+.sortBy {
+  width: 50%;
+  margin: 20px;
+  align-self: right;
+  /* background-color: brown; */
+}
+
+
+.maxItems {
+  width: 25%;
+  margin: 20px;
+}
