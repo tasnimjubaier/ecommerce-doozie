@@ -1,13 +1,33 @@
 {
   "rakuten_query_parameters": {
-    "keyword": "shirt",
-    "page": 1,
-    "hits": 2
+    "keyword": "string --> This is the only required parameter",
+    "sort": "standard OR -reviewCount OR -reviewAverage OR -itemPrice",
+    "shopCode": "string",
+    "genreId": "integer",
+    "page": "integer",
+    "hits": "integer (the number of items you want to see in the result)",
+    "condition": "integer --> 1 for new OR 0 for used",
+    "imageFlag": "integer --> 1 for only products with images OR 0 for all products",
+    "shipOverseasFlag": "integer --> 1 for only products that can be shipped overseas OR 0 for all products",
+    "shipOverseasArea": "string (i.e. US, GB, FR, CN)"
   },
   "yahoo_query_parameters": {
-    "query": "shirt",
-    "results": 2,
-    "start": 1
+    "query": "string --> This is the only required parameter",
+    "genre_category_id": "integer",
+    "brand_id": "integer",
+    "seller_id": "integer",
+    "price_from": "integer",
+    "price_to": "integer",
+    "results": "integer (how many results per page)",
+    "start": "integer (use it for pagination. start + results)",
+    "in_stock": "boolean",
+    "is_discounted": "boolean",
+    "shipping": "integer --> 1 for no setting OR 2 for free shipping OR 3 for conditional free shipping",
+    "sort": "-score OR -review_count OR -review_average OR -price",
+    "condition": "integer --> 1 for new OR 0 for used",
+    "delivery_area": "string --> a 2-digit string (01 ~ 47) with a leading 0 (i.e. 01: Hokkaido, 05: Akita, 13: Tokyo)",
+    "delivery_day": "integer --> 0 for today OR 1 for tomorrow OR 2 for day after tomorrow",
+    "delivery_deadline": "integer --> specify in 24-hour notation (1 to 24)"
   },
   "from_scheduler": false
 }

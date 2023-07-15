@@ -1,42 +1,98 @@
 .wrapper {
-  width: 90%;
-  background-color: rgb(187, 186, 186);
+  width: 100%;
+  height: inherit;
+  background-color: inherit;
 
+  border-radius: inherit;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   /* justify-content: center; */
-  margin: 20px 90px;
-
   overflow: hidden;
-  transition: .3s;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: row;
+  /* background-color: whitesmoke; */
+  align-items: center;
+  justify-content: right;
+  height: 53px;
+}
 
-.options {
+.group {
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  /* justify-content: space-evenly; */
+  /* background-color: brown; */
 }
 
 .priceRange {
-  width: 25%;
-  margin: 20px;
-  align-self: right;
+  margin: 5px 41px 19px 61px;
+  width: 439px;
   /* background-color: brown; */
+}
+
+.priceRangeText {
+  font-size: 1.4em;
+  font-weight: normal;
+}
+
+.priceRangeSlider {
+  margin-top: 39px;
+  width: 399px;
 }
 
 .sortBy {
   width: 50%;
-  margin: 20px;
-  align-self: right;
+  margin: 5px 20px 20px 20px;
   /* background-color: brown; */
 }
 
+.sortByText {
+  font-size: 1.4em;
+  font-weight: normal;
+}
 
-.maxItems {
-  width: 25%;
-  margin: 20px;
+.sortByValue {
+
+}
+
+.sortByType {
+
+}
+
+
+
+.button {
+  height: 44px;
+  width: 99px;
+  border: none;
+  background-color: rgb(202, 230, 255);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  border-radius: 5px;
+  margin-right: 21px;
+  
+  transition: all 0.2s ease;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.button:hover {
+  background-color: rgb(185, 221, 254);
+  /* font-size: 1.29em; */
+}
+
+.button:active {
+  transform: scale(0.96);
+  background-color: rgb(153, 204, 252);
+}
+
+
+input {
+  height: 21px;
+  padding: 2px 5px;
 }

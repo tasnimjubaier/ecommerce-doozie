@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setItems, setSearchPhase } from '../../features/Items/itemSlice'
 
 import styles from './index.module.css'
-import { Button, Divider, IconButton, InputBase, Paper } from '@mui/material'
+import { Box, Button, ButtonBase, Divider, FormControl, IconButton, InputBase, InputLabel, OutlinedInput, Paper } from '@mui/material'
 import { Search as SearchIcon } from '@mui/icons-material'
 import { formatItems } from '../../utils/formatter'
 import { ItemLoadingState } from '../../utils/types'
@@ -34,26 +34,20 @@ const SearchBar = () => {
   }
 
   return (
-    <div className='searchDiv'>
-      <Paper
-        component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-      >
-        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Type search key"
-          className={styles['input']}
-          onChange={(e) => setTopic(e.target.value)}
-          // inputProps={{ 'aria-label': 'search google maps' }}
-        />
-        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        <IconButton onClick={handleSearch} color="primary" sx={{ p: '10px' }} aria-label="directions">
-          <Button>Search</Button>
-        </IconButton>
-      </Paper>
+    <div className={styles["wrapper"]}>
+      <div className={styles["input"]}>
+        <FormControl fullWidth className={styles["inputBox"]}>
+          <InputLabel htmlFor="search">Type search key</InputLabel>
+          <OutlinedInput
+            id="search"
+            label="Type search key"
+            onChange={(e) => setTopic(e.target.value)}
+          />
+        </FormControl>
+        <button onClick={handleSearch} className={styles["button"]}>
+          Search
+        </button>
+      </div>
     </div>
   )
 }

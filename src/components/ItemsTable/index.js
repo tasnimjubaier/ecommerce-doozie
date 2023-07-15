@@ -8,6 +8,7 @@ import { Box, Checkbox, FormControlLabel, IconButton, Paper, Switch, Table, Tabl
 import { visuallyHidden } from '@mui/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { Link } from 'react-router-dom';
 
 
 // item :: 
@@ -159,7 +160,11 @@ const ItemsTable = () => {
                       >
                         {item.id}
                       </TableCell>
-                      <TableCell align="center">{item.title}</TableCell>
+                      <TableCell align="center">
+                        <Link to={`/item/${item.item_id}`} state={{platform : item.platform}}>
+                          {item.title}
+                        </Link>
+                      </TableCell>
                       <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">{item.shop_name}</TableCell>
                       <TableCell align="center">{item.price}</TableCell>
