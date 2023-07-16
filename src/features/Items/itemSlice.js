@@ -5,7 +5,7 @@ import { getComparator } from "../../utils/comparators";
 
 const initialState = {
 	items: [],
-	phase: ItemLoadingState.Idle
+	phase: ItemLoadingState.NotSearced
 }
 
 const slice = createSlice({
@@ -28,7 +28,7 @@ const slice = createSlice({
 
 			state.items = state.items.sort(getComparator(sortBy, sortOrder))
 
-			state.phase = ItemLoadingState.Idle
+			state.phase = ItemLoadingState.Searched
         },
 		filterByPrice: (state, action) => { // {priceRange}
             let minPrice = action.payload.priceRange[0]

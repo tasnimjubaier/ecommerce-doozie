@@ -1,34 +1,39 @@
 import React from 'react'
 import styles from './index.module.css'
 import { Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 
 const TopBanner = () => {
-  return (
-    <div className={styles['wrapper']}>
-        <div className={styles['left']}>
-            <h1 className={styles['title']}>
-                Doozie
-            </h1>
-        </div>
-        <div className={styles['right']}>
-            <div className={styles['menu']}>
-                <div className={styles['home']}>
-                    <span>Home</span>
-                </div>
-                <div className={styles['search']}>
-                    <span>Search Items</span>
-                </div>
-                <div className={styles['browse']}>
-                    <span>Browse Items</span>
+    const navigate = useNavigate()
+
+
+        
+    return (
+        <div className={styles['wrapper']}>
+            <div className={styles['left']}>
+                <h1 className={styles['title']} onClick={(e) => navigate({pathname: "/"})}>
+                    Doozie
+                </h1>
+            </div>
+            <div className={styles['right']}>
+                <div className={styles['menu']}>
+                    <div className={styles['home']} onClick={(e) => navigate({pathname: "/"})}>
+                        <span>Home</span>
+                    </div>
+                    <div className={styles['search']} onClick={(e) => navigate({pathname: "/"})}>
+                        <span>Search Items</span>
+                    </div>
+                    <div className={styles['browse']} onClick={(e) => navigate({pathname: "/not-found"})}>
+                        <span>Browse Items</span>
+                    </div>
                 </div>
             </div>
+            <div className={styles['extra']}>
+                
+            </div>
         </div>
-        <div className={styles['extra']}>
-            
-        </div>
-    </div>
-  )
+    )
 }
 
 export default TopBanner

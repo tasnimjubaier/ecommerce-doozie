@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.css'
-import { json, useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { getItemById } from '../../service/doozieApi'
 import TopBanner from '../../components/TopBanner'
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Navigation, Pagination, A11y } from 'swiper/modules';
+
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useSearchParams } from "react-router-dom";
 // title, headline, description
 
 // imageurl, shopurl, itemurl, 
@@ -18,15 +22,19 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import { Skeleton } from '@mui/material'
 
 
 const Item = (props) => {
   const {itemId} = useParams()
   const [item, setItem] = useState(null)
-  const location = useLocation()
-  const {state : {platform}} = location
-  let images = []
-  const [toggler, setToggler] = useState(false);
+  // const location = useLocation()
+  // const {state} = location
+  const [queryString] = useSearchParams()
+  
+  const platform = queryString.get('platform')
+  console.log(platform)
+
 
   useEffect(() => {
 
@@ -37,7 +45,27 @@ const Item = (props) => {
     
     fetchData()
     return () => {}
-  }, [itemId])
+  }, [itemId, platform])
+
+
+
+  if(item === null) {
+    return (
+      <>
+        <TopBanner />
+        <div className={styles['skeleton']}>
+
+          <div className={styles['skimage']}>
+            <Skeleton  variant='rounded' sx={{height: '600px', width: "500px"}} animation="wave"/>
+          </div>
+          <div className={styles['skright']}>
+            <Skeleton  variant='rounded' sx={{height: '200px', width:"90%", marginBottom: '15px'}} animation="wave"/>
+            <Skeleton  variant='rounded' sx={{height: '600px', width:"90%", marginBottom: '15px'}} animation="wave"/>
+          </div>
+        </div>
+      </>
+    )
+  }
 
 
   return (
@@ -54,7 +82,7 @@ const Item = (props) => {
             pagination={{ clickable: true }}
           >
             {item?.image_urls.map((img, index) => (
-              <SwiperSlide key={index}><img src={img}/></SwiperSlide>
+              <SwiperSlide key={index}><img src={img} alt='Item'/></SwiperSlide>
             ))}
           </Swiper>
         </div>
@@ -65,56 +93,56 @@ const Item = (props) => {
           <h4 className={styles['title']}>
             {item?.title}
           </h4>
-          <h5 className={styles['description']}>
+          <h4 className={styles['description']}>
             {item?.description}
-          </h5>
+          </h4>
         </div>
       </div>
       <div className={styles['middle']}>
         <div className={styles['middle-left']}>
-          <div className={styles['price']}>
+          <div className={`${styles['price']} ${styles['item']}`}>
             <h5>Price: </h5>
             <h6>{item?.price}</h6>
           </div>
-          <div className={styles['currency']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Currency: </h5>
             <h6>{item?.currency}</h6>
           </div>
-          <div className={styles['availablity']}>
+          <div className={`${styles['availability']} ${styles['item']}`}>
             <h5>Availability: </h5>
             <h6>{item?.availability}</h6>
           </div>
-          <div className={styles['shopname']}>
+          <div className={`${styles['shopname']} ${styles['item']}`}>
             <h5>Shop Name: </h5>
             <h6>{item?.shop_name}</h6>  
           </div>
-          <div className={styles['reviewCount']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Review Count: </h5>
             <h6>{item?.review_count}</h6>
           </div>
-          <div className={styles['reviewAverage']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Review Average: </h5>
             <h6>{item?.review_average}</h6>
           </div>
-          <div className={styles['brand']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Brand: </h5>
             <h6>{item?.brand}</h6>
           </div>
         </div>
         <div className={styles['middle-right']}>
-          <div className={styles['condition']}>
+        <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Condition: </h5>
             <h6>{item?.condition}</h6>
           </div>
-          <div className={styles['shippingOverseas']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Shipping Overseas: </h5>
-            <h6>{item?.shipping_overseas}</h6>
+            <h6 title={item?.shipping_overseas}>{item?.shipping_overseas.length > 15 ? item?.shipping_overseas.substring(0, 15) + "..." : item?.shipping_overseas}</h6>
           </div>
-          <div className={styles['shopReviewCount']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Shop Review Count: </h5>
             <h6>{item?.shop_review_count}</h6>
           </div>
-          <div className={styles['saleEndTime']}>
+          <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Sale End Time: </h5>
             <h6>{item?.sale_end_time}</h6>
           </div>
@@ -122,6 +150,18 @@ const Item = (props) => {
       </div>
       <div className={styles['bottom']}>
               {/* shop url , item url */}
+              <div></div>
+              <button  className={styles['moreinfo']}> 
+                <a href={item?.item_url}>
+                  More Info <ArrowForwardIcon />
+                </a>
+              </button>
+              <button  className={styles['shopnow']}>  
+                <a href={item?.shop_url}>
+                  Shop now <AddShoppingCartIcon />
+                </a>
+              </button>
+              <div></div>
       </div>
     </div>
   )

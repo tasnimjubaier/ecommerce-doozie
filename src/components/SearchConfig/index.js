@@ -12,7 +12,7 @@ const SearchConfig = () => {
     const [height, setHeight] = useState(ConfigMinHeight)
 
     const handleExpand = (e) => {
-        setHeight((height == ConfigMinHeight ? ConfigMaxHeight : ConfigMinHeight))
+        setHeight((height === ConfigMinHeight ? ConfigMaxHeight : ConfigMinHeight))
         setOpen(!open)
     }
 

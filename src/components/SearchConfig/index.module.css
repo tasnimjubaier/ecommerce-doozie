@@ -33,7 +33,7 @@
 }
 
 .expand:hover {
-    /* background-color: rgb(185, 221, 254); */
+    background-color: inherit;
     font-size: 1.29em;
 }
 

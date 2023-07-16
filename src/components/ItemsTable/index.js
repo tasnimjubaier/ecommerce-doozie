@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react'
-
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import styles from './index.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Checkbox, FormControlLabel, IconButton, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Link } from 'react-router-dom';
+import { Box, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Link, createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { ItemLoadingState } from '../../utils/types';
+import { setItems, setSearchPhase } from '../../features/Items/itemSlice';
+import { getItems } from '../../service/doozieApi';
+import { formatItems } from '../../utils/formatter';
+import { setAllConfig } from '../../features/SearchConfig/searchConfigSlice';
 
 
 // item :: 
@@ -86,29 +86,66 @@ EnhancedTableHead.propTypes = {
 
 const ItemsTable = () => {
   const items = useSelector(state => state.items?.items)
+  const searchPhase = useSelector(state => state.items?.phase)
+  const [searchConfig, setSearchConfig] = useState(null)
+  const [page, setPage] = React.useState(0)
+  const rowsPerPage = 10
+  
+  const navigate = useNavigate()
+  const [searchQuery] = useSearchParams()
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if(searchQuery.size === 0) return 
+    console.log({searchQuery})
+    const searchKey = searchQuery.get('key')
+    const minPrice = searchQuery.get('min')
+    const maxPrice = searchQuery.get('max')
+    const sortBy = searchQuery.get('sortBy')
+    const sortOrder = searchQuery.get('sortOrder')
+
+    // dispatch(setAllConfig({searchKey, range: [minPrice, maxPrice], sortBy, sortOrder}))
+
+    setSearchConfig({searchKey, minPrice, maxPrice, sortBy, sortOrder})
+    return () => {}
+  }, [searchQuery])
 
 
-  const handleClick = (event, name) => {
-  };
+  useEffect(() => {
+    /// api call....
+    console.log({searchConfig})
+    if(searchConfig === null) return 
+    const fetchData = async () => {
+      dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
+      const items = await getItems(searchConfig.searchKey, searchConfig.minPrice, searchConfig.maxPrice, searchConfig.sortBy, searchConfig.sortOrder)
+      const formattedItems = formatItems(items)
+      console.log(formattedItems)
+      dispatch(setItems({items : formattedItems}))
+      dispatch(setSearchPhase({phase: ItemLoadingState.Searched}))
+    }
+    console.log({searchConfig})
+    
+    fetchData()
+
+    return () => {}
+  }, [searchConfig])
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
-  useEffect(() => {
-    console.log(items[2]?.image_urls[1])
-  }, [items])
+  const handleItemClick = (e, item) => {
+    navigate({
+      pathname: `/item/${item.item_id}`,
+      search: createSearchParams({ platform: item.platform }).toString(),
+    })
+  }
 
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
 
@@ -123,9 +160,42 @@ const ItemsTable = () => {
 
 
 
+  if(searchPhase === ItemLoadingState.Loading) {
+    let arr = new Array(12).fill(0)
+    return (
+      <div className={styles['wrapper']}>
+        <Box className={styles['table']}>
+          { arr.map((ar, key) => (
+            <Skeleton key={key} variant='rounded' sx={{height: '35px', marginBottom: '15px'}} animation="wave"/>
+          ))}
+        </Box>
+      </div>
+    )
+  }
+
+  if(visibleRows.length === 0 && searchPhase === ItemLoadingState.NotSearced) {
+    
+    return (
+      <div className={styles['notsearched']}>
+        Type some key to search!
+      </div>
+    )
+
+  }
+
+  if(visibleRows.length === 0 && searchPhase === ItemLoadingState.Searched) {
+    return (
+      <div className={styles['notsearched']}>
+        No Data Found!
+      </div>
+    )
+  }
+
+
+
   return (
-    <div className='tableDiv'>
-      <Box sx={{ width: '100%' }}>
+    <div className={styles['wrapper']}>
+      <Box className={styles['table']}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer>
             <Table
@@ -142,8 +212,9 @@ const ItemsTable = () => {
 
                   return (
                     <TableRow
+                      title={item.title}
                       hover
-                      onClick={(event) => handleClick(event, item.name)}
+                      onClick={(event) => handleItemClick(event, item)}
                       // role="checkbox"
                       // aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -160,11 +231,7 @@ const ItemsTable = () => {
                       >
                         {item.id}
                       </TableCell>
-                      <TableCell align="center">
-                        <Link to={`/item/${item.item_id}`} state={{platform : item.platform}}>
-                          {item.title}
-                        </Link>
-                      </TableCell>
+                      <TableCell align="center">{item.title}</TableCell>
                       <TableCell align="center">{item.description}</TableCell>
                       <TableCell align="center">{item.shop_name}</TableCell>
                       <TableCell align="center">{item.price}</TableCell>
@@ -186,13 +253,12 @@ const ItemsTable = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[10]}
             component="div"
             count={items.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       </Box>

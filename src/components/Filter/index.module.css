@@ -96,3 +96,10 @@ input {
   height: 21px;
   padding: 2px 5px;
 }
+
+.error {
+  color: red;
+  font-size: 1.1em;
+  font-weight: 600;
+
+}

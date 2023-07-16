@@ -9,7 +9,7 @@ const headers = {
 
 
 
-export const getItems = async (searchKey, index, maxItems) => {
+export const getItems = async (searchKey, minPrice, maxPrice, sortBy, sortOrder) => {
     let url = baseUrl + "/items/search"
     let queryJson = getBasicQuery(searchKey)
     

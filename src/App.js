@@ -11,7 +11,9 @@ function App() {
         <Routes>
           {/* Define your routes here */}
           <Route path="/" element={<Search />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/item/:itemId" element={<Item />} />
+          {/* <Route path="/bot-found" element={<Item />} /> */}
         </Routes>
       </Router>
     </div>

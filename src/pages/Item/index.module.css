@@ -1,7 +1,7 @@
 .wrapper {
     max-width:  100vw;
     min-height: 100vh;
-    background-color: rgb(255, 255, 210);
+    /* background-color: rgb(253, 253, 243); */
 
 }
 
@@ -39,8 +39,9 @@ img {
     width: 60%;
     /* background-color: red; */
     min-height: 700px;
-    padding-right: 21px;
-    margin-top: 33px;
+    padding-right: 90px;
+    padding-bottom: 20px;
+    margin-top: 30px;
 
 }
 
@@ -49,22 +50,122 @@ img {
 }
 
 .middle {
-    background-color: brown;
     width: 100%;
+
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
 
 .middle-left {
-    
+    width: 40%;
+
 }
 
-.middle-right {
+.item {
+    /* background-color: whitesmoke; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
 
+    height: 60px;
+    /* justify-content: center; */
+    /* padding: 0; */
+    margin: 0px 0 0px 190px;
+
+
+}
+
+h5 {
+    font-size: 1.2em;
+    font-weight: normal;
+    align-self: left;
+
+    width: 190px;
+}
+
+h6 {
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+
+.middle-right {
+    width: 50%;
 }
 
 .bottom {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
 
+a {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+
+button {
+    height: 55px;
+    width: 199px;
+    border: none;
+    background-color: rgb(202, 230, 255);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    border-radius: 5%;
+    
+    /* transition: all 0.2s ease; */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+button:hover {
+    background-color: rgb(185, 221, 254);
+}
+
+button:active {
+    transform: scale(0.96);
+    background-color: rgb(153, 204, 252);
+}
+
+
+
+
+
+
+.skeleton {
+    height: 100vh;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.skimage{
+    width: 34%;
+
+
+    padding: 130px 90px 0 190px;
+    /* background-color: aliceblue; */
+}
+
+.skright {
+    width: 80%;
+    /* background-color: antiquewhite; */
+    padding: 90px 0 0 40px
 }

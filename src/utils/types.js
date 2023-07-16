@@ -13,6 +13,7 @@ export const SortOrders = {
 }
 
 export const ItemLoadingState = {
-    Idle: 1,
-    Loading: 2
+    NotSearced: 1,
+    Loading: 2,
+    Searched: 3
 }

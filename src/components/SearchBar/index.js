@@ -10,26 +10,47 @@ import { Search as SearchIcon } from '@mui/icons-material'
 import { formatItems } from '../../utils/formatter'
 import { ItemLoadingState } from '../../utils/types'
 import { setSearchKey } from '../../features/SearchConfig/searchConfigSlice'
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 
 const SearchBar = () => {
-  const [topic, setTopic] = useState("")
+  const [searchQuery] = useSearchParams()
+  const [topic, setTopic] = useState(searchQuery.get('key') === null ? "" : searchQuery.get('key'))
   const [error, setError] = useState("")
+
+  const priceRange = useSelector(state => state.searchConfig?.priceRange)
+  const sortBy = useSelector(state => state.searchConfig?.sortBy)
+  const sortOrder = useSelector(state => state.searchConfig?.sortOrder)
   
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleKeyDown = (e) => {
+    if(e.key === "Enter") {
+      handleSearch(e)
+    }
+  }
 
   const handleSearch = async (e) => {
     e.preventDefault()
 
-    if(topic == "") setError("Please provide search key")
+    if(topic === "") setError("Please provide search key")
     else {
       // api call...
       // update store ...
-      dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
-      const items = await getItems(topic, 0)
-      const formattedItems = formatItems(items)
-      console.log(formattedItems)
-      dispatch(setItems({items : formattedItems}))
-      dispatch(setSearchPhase({phase: ItemLoadingState.Idle}))
+      /// we won't do this here. 
+      // dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
+      // const items = await getItems(topic)
+      // const formattedItems = formatItems(items)
+      // console.log(formattedItems)
+      // dispatch(setItems({items : formattedItems}))
+      // dispatch(setSearchPhase({phase: ItemLoadingState.Searched}))
+
+      // we'll just navigate to the page..
+      dispatch(setSearchKey({searchKey : topic}))
+      navigate({
+        pathname: '/search',
+        search: createSearchParams({key: topic, min : priceRange[0], max: priceRange[1], sortBy, sortOrder}).toString()
+      })
     }
   }
 
@@ -41,13 +62,17 @@ const SearchBar = () => {
           <OutlinedInput
             id="search"
             label="Type search key"
-            onChange={(e) => setTopic(e.target.value)}
+            onKeyDown={e => handleKeyDown(e)}
+            onChange={(e) => {setTopic(e.target.value); setError("")}}
+            value={topic}
+            autoFocus
           />
         </FormControl>
         <button onClick={handleSearch} className={styles["button"]}>
           Search
         </button>
       </div>
+      <div  className={styles["error"]}>{error}</div>
     </div>
   )
 }

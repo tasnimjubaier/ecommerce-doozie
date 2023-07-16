@@ -8,7 +8,7 @@ import { filterByPrice, setItems, setSearchPhase, sortItems } from '../../featur
 import { formatItems } from '../../utils/formatter';
 import { setAllConfig } from '../../features/SearchConfig/searchConfigSlice';
 import { ItemLoadingState } from '../../utils/types';
-import { Link } from 'react-router-dom';
+import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 // filter properties
 // filter by price range, 
@@ -73,44 +73,36 @@ function BpRadio(props) {
 }
 
 const Filter = ({foldCard, height}) => {
-  const [priceRange, setPriceRange] = useState([10, 20])
+  const [priceRange, setPriceRange] = useState([0, 10000000])
   const [sortBy, setSortBy] = useState(1)
+  const [error, setError] = useState('')
   const [sortOrder, setSortOrder] = useState(1)
 
   const topic = useSelector(state => state.searchConfig?.searchKey)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     console.log(priceRange)
+    if(isNaN(priceRange[0])) console.log("NaN found")
   }, [priceRange])
 
-  const handlePriceRangeChange = (event, newValue, activeThumb) => {
-    if (!Array.isArray(newValue)) {
-      return;
-    }
-
-    if (activeThumb === 0) {
-      setPriceRange([Math.min(newValue[0], priceRange[1] - MinPriceRange), priceRange[1]]);
-    } else {
-      setPriceRange([priceRange[0], Math.max(newValue[1], priceRange[0] + MinPriceRange)]);
-    }
-  }
 
   const handleApply = async () => {
-    // api call
-    // update store 
+    if(isNaN(priceRange[0]) ||  isNaN(priceRange[1]))  {
+      setError("Please provide a number")
+      return 
+    }
+
     foldCard()
 
-    // dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
-    // const items = await getItems(topic, 0)
-    // const formattedItems = formatItems(items)
+    dispatch(setAllConfig({searchKey: topic, range: [priceRange[0], priceRange[1]], sortBy, sortOrder}))
 
-    // dispatch(setItems({items : formattedItems}))
-    // // dispatch(filterByPrice({priceRange}))
-    // dispatch(sortItems({sortBy, sortOrder}))
-    // dispatch(setAllConfig({range: priceRange, sortBy, sortOrder}))
-    // dispatch(setSearchPhase({phase: ItemLoadingState.Idle}))
+    navigate({
+      pathname: "/search",
+      search: createSearchParams({ key: topic, min: priceRange[0], max: priceRange[1], sortBy, sortOrder }).toString()
+    })
   }
 
   const handleDiscard = () => {
@@ -133,8 +125,8 @@ const Filter = ({foldCard, height}) => {
   return (
     <div className={styles['wrapper']} style={{height}}>
       <div className={styles['buttons']}>
-        <button className={styles['button']} onClick={handleDiscard}>Discard</button>
-        <button className={styles['button']} onClick={handleApply}>Apply</button>
+        <button className={styles['button']} onChange={() => setError("")} onClick={handleDiscard}>Discard</button>
+        <button className={styles['button']} onChange={() => setError("")} onClick={handleApply}>Apply</button>
       </div>
 
       <div className={styles['group']}>
@@ -142,13 +134,6 @@ const Filter = ({foldCard, height}) => {
           <h5 className={styles['priceRangeText']}>
             Price Range
           </h5>
-          {/* <Slider
-              className={styles['priceRangeSlider']}
-              value={priceRange}
-              onChange={handlePriceRangeChange}
-              valueLabelDisplay="auto"
-              disableSwap
-          /> */}
           <div style={{display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <span>Min</span>
@@ -192,6 +177,9 @@ const Filter = ({foldCard, height}) => {
             </RadioGroup>
           </FormControl>
         </div>
+      </div>
+      <div className={styles['error']}>
+        {error}
       </div>
       
     </div>
