@@ -1,6 +1,7 @@
 
 .wrapper{
     width: 100%;
+    min-height: 80vh;
 
     display: flex;
     align-items: center;
@@ -14,6 +15,7 @@
 
 .notsearched {
     width: 100%;
+    min-height: 80vh;
     height: 600px;
 
     font-size: 1.6em;

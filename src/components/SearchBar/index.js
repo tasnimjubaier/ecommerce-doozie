@@ -14,9 +14,10 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 
 const SearchBar = () => {
   const [searchQuery] = useSearchParams()
-  const [topic, setTopic] = useState(searchQuery.get('key') === null ? "" : searchQuery.get('key'))
+  // const [topic, setTopic] = useState(searchQuery.get('key') === null ? "" : searchQuery.get('key'))
   const [error, setError] = useState("")
 
+  const topic = useSelector(state => state.searchConfig?.searchKey)
   const priceRange = useSelector(state => state.searchConfig?.priceRange)
   const sortBy = useSelector(state => state.searchConfig?.sortBy)
   const sortOrder = useSelector(state => state.searchConfig?.sortOrder)
@@ -35,18 +36,7 @@ const SearchBar = () => {
 
     if(topic === "") setError("Please provide search key")
     else {
-      // api call...
-      // update store ...
-      /// we won't do this here. 
-      // dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
-      // const items = await getItems(topic)
-      // const formattedItems = formatItems(items)
-      // console.log(formattedItems)
-      // dispatch(setItems({items : formattedItems}))
-      // dispatch(setSearchPhase({phase: ItemLoadingState.Searched}))
-
       // we'll just navigate to the page..
-      dispatch(setSearchKey({searchKey : topic}))
       navigate({
         pathname: '/search',
         search: createSearchParams({key: topic, min : priceRange[0], max: priceRange[1], sortBy, sortOrder}).toString()
@@ -63,7 +53,7 @@ const SearchBar = () => {
             id="search"
             label="Type search key"
             onKeyDown={e => handleKeyDown(e)}
-            onChange={(e) => {setTopic(e.target.value); setError("")}}
+            onChange={(e) => {dispatch(setSearchKey({searchKey : e.target.value})); setError("")}}
             value={topic}
             autoFocus
           />

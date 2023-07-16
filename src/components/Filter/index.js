@@ -6,8 +6,8 @@ import { getItems, getItemsByPrice } from '../../service/doozieApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterByPrice, setItems, setSearchPhase, sortItems } from '../../features/Items/itemSlice';
 import { formatItems } from '../../utils/formatter';
-import { setAllConfig } from '../../features/SearchConfig/searchConfigSlice';
-import { ItemLoadingState } from '../../utils/types';
+import { setAllConfig, setPriceRange, setSortBy, setSortOrder } from '../../features/SearchConfig/searchConfigSlice';
+import { ItemLoadingState, SortOptions, SortOrders } from '../../utils/types';
 import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 
 // filter properties
@@ -73,12 +73,13 @@ function BpRadio(props) {
 }
 
 const Filter = ({foldCard, height}) => {
-  const [priceRange, setPriceRange] = useState([0, 10000000])
-  const [sortBy, setSortBy] = useState(1)
   const [error, setError] = useState('')
-  const [sortOrder, setSortOrder] = useState(1)
 
   const topic = useSelector(state => state.searchConfig?.searchKey)
+  const priceRange = useSelector(state => state.searchConfig?.priceRange)
+  const sortBy = useSelector(state => state.searchConfig?.sortBy)
+  const sortOrder = useSelector(state => state.searchConfig?.sortOrder)
+
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
@@ -111,14 +112,14 @@ const Filter = ({foldCard, height}) => {
 
   const handleSortByChange = (e) => {
     let val = parseInt(e.target.value) 
-    console.log({val: e.target.value})
-    setSortBy(val)
+    dispatch(setSortBy({sortBy: val}))
   }
 
   const handleSortOrderChange = (e) => {
     let val = parseInt(e.target.value) 
-    console.log({val: e.target.value})
-    setSortOrder(val)
+    console.log({val})
+    dispatch(setSortOrder({sortOrder: val}))
+    
   }
   
 
@@ -137,11 +138,11 @@ const Filter = ({foldCard, height}) => {
           <div style={{display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <span>Min</span>
-              <input defaultValue={0} onChange={(e) => setPriceRange([(parseInt(e.target.value)), priceRange[1]])}></input>
+              <input defaultValue={priceRange[0]} onChange={(e) => dispatch(setPriceRange({ range : [(parseInt(e.target.value)), priceRange[1]]}))}></input>
             </div>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <span>Max</span>
-              <input defaultValue={10000000} onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}></input>
+              <input defaultValue={priceRange[1]} onChange={(e) => dispatch(setPriceRange({ range: [priceRange[0], parseInt(e.target.value)]}))}></input>
             </div>
           </div>
         </div>
@@ -151,7 +152,6 @@ const Filter = ({foldCard, height}) => {
             <h5 className={styles['sortByText']}>
               Sort By
             </h5>
-            {/* <FormLabel className={styles['sortByText']}>Sort By</FormLabel> */}
             <RadioGroup
               className={styles['sortByValue']}
               row
@@ -160,9 +160,10 @@ const Filter = ({foldCard, height}) => {
               name="customized-radios"
               onChange={handleSortByChange}
             >
-              <FormControlLabel value="2" control={<BpRadio />} label="Price" />
-              <FormControlLabel value="3" control={<BpRadio />} label="Rating Count" />
-              <FormControlLabel value="4" control={<BpRadio />} label="Rating Average" />
+              <FormControlLabel value="1" control={<BpRadio />} label="None" checked={sortBy === SortOptions.None} />
+              <FormControlLabel value="2" control={<BpRadio />} label="Price" checked={sortBy === SortOptions.Price} />
+              <FormControlLabel value="3" control={<BpRadio />} label="Review Count" checked={sortBy === SortOptions.ReviewCount} />
+              <FormControlLabel value="4" control={<BpRadio />} label="Review Average" checked={sortBy === SortOptions.ReviewAverage} />
             </RadioGroup>
             <RadioGroup
               className={styles['sortByType']}
@@ -172,8 +173,8 @@ const Filter = ({foldCard, height}) => {
               name="customized-radios"
               onChange={handleSortOrderChange}
             >
-              <FormControlLabel value="1" control={<BpRadio />} label="Asending" />
-              <FormControlLabel value="2" control={<BpRadio />} label="Descending" />
+              <FormControlLabel value="1" control={<BpRadio />} label="Ascending" checked={sortOrder === SortOrders.Ascending} />
+              <FormControlLabel value="2" control={<BpRadio />} label="Descending" checked={sortOrder === SortOrders.Descending} />
             </RadioGroup>
           </FormControl>
         </div>

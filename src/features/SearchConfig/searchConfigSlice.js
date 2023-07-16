@@ -4,7 +4,7 @@ import { SortOptions, SortOrders } from "../../utils/types";
 
 const initialState = {
     searchKey: "",
-	priceRange: [1, 199999999],
+	priceRange: [0, 10000000],
     sortBy: SortOptions.None,
     sortOrder: SortOrders.Ascending 
 }
@@ -24,6 +24,12 @@ const slice = createSlice({
             state.sortBy = action.payload.sortBy
             state.sortOrder = action.payload.sortOrder
         },
+        setSortBy: (state, action) => { // {sortBy}
+            state.sortBy = action.payload.sortBy
+        },
+        setSortOrder: (state, action) => { // {sortOrder}
+            state.sortOrder = action.payload.sortOrder
+        },
         setAllConfig:(state, action) => { // {searchKey, sortBy, sortOrder, range}
             if(action.payload.searchKey) state.searchKey = action.payload.searchKey
             if(action.payload.range) state.priceRange = action.payload.range
@@ -33,5 +39,5 @@ const slice = createSlice({
 	},
 })
 
-export const { setSearchKey, setPriceRange, setSortConfig, setAllConfig } = slice.actions
+export const { setSearchKey, setPriceRange, setSortConfig, setSortBy, setSortOrder, setAllConfig } = slice.actions
 export default slice.reducer
