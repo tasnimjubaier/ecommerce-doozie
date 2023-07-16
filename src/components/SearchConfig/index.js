@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import styles from './index.module.css'
 import SearchBar from '../SearchBar'
 import Filter from '../Filter'
+
+import styles from './index.module.css'
+
 
 const ConfigMinHeight = 59
 const ConfigMaxHeight = 299

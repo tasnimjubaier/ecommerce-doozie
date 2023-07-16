@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import styles from './index.module.css'
 import { styled } from '@mui/material/styles';
-import {Slider, Box, Typography, ButtonBase, FormControlLabel, FormControl, FormLabel, RadioGroup, Radio, Divider} from '@mui/material';
-import { getItems, getItemsByPrice } from '../../service/doozieApi';
+import { FormControlLabel, FormControl, RadioGroup, Radio, Divider} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterByPrice, setItems, setSearchPhase, sortItems } from '../../features/Items/itemSlice';
-import { formatItems } from '../../utils/formatter';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+
 import { setAllConfig, setPriceRange, setSortBy, setSortOrder } from '../../features/SearchConfig/searchConfigSlice';
-import { ItemLoadingState, SortOptions, SortOrders } from '../../utils/types';
-import { Link, createSearchParams, useNavigate } from 'react-router-dom';
+import { SortOptions, SortOrders } from '../../utils/types';
+
+import styles from './index.module.css'
 
 // filter properties
 // filter by price range, 

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import styles from './index.module.css'
-import { useLocation, useParams } from 'react-router-dom'
-import { getItemById } from '../../service/doozieApi'
-import TopBanner from '../../components/TopBanner'
-
+import { useSearchParams, useParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
 
+import { getItemById } from '../../service/doozieApi'
+import TopBanner from '../../components/TopBanner'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { useSearchParams } from "react-router-dom";
+
+import styles from './index.module.css'
+
 // title, headline, description
 
 // imageurl, shopurl, itemurl, 
@@ -29,8 +29,6 @@ import { PageTitleFormatter } from '../../utils/formatter'
 const Item = (props) => {
   const {itemId} = useParams()
   const [item, setItem] = useState(null)
-  // const location = useLocation()
-  // const {state} = location
   const [queryString] = useSearchParams()
   
   const platform = queryString.get('platform')

@@ -6,7 +6,7 @@ const DescLength = 22
 const HeadlineLength = 22
 
 
-
+// formats each items (shrinks size)
 export const formatItems = (items, lastIndex) => {
     let formatted = items
 
@@ -26,6 +26,8 @@ export const formatItems = (items, lastIndex) => {
     return formatted
 }
 
+
+// 
 export const filterItems = (items, searchconfig, prevIndex) => {
     let filtered = items.filter(item => {
         return item.price >= searchconfig.minPrice && item.price <= searchconfig.maxPrice
@@ -56,7 +58,7 @@ export const filterItems = (items, searchconfig, prevIndex) => {
     return filtered
 }
 
-
+// empty component to load page title
 export const PageTitleFormatter = ({title}) => {
     useEffect(() => {
         document.title = title 

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SortOptions, SortOrders } from "../../utils/types";
 
+// this store stores search configuration.
 
 const initialState = {
     searchKey: "",

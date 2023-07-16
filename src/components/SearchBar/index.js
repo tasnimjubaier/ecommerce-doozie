@@ -1,20 +1,15 @@
 import React, { useState } from 'react'
-import { getItems } from '../../service/doozieApi'
-
 import { useDispatch, useSelector } from 'react-redux'
-import { setItems, setSearchPhase } from '../../features/Items/itemSlice'
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { FormControl, InputLabel, OutlinedInput } from '@mui/material'
+
+import { setSearchKey } from '../../features/SearchConfig/searchConfigSlice'
 
 import styles from './index.module.css'
-import { Box, Button, ButtonBase, Divider, FormControl, IconButton, InputBase, InputLabel, OutlinedInput, Paper } from '@mui/material'
-import { Search as SearchIcon } from '@mui/icons-material'
-import { formatItems } from '../../utils/formatter'
-import { ItemLoadingState } from '../../utils/types'
-import { setSearchKey } from '../../features/SearchConfig/searchConfigSlice'
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
+
 
 const SearchBar = () => {
   const [searchQuery] = useSearchParams()
-  // const [topic, setTopic] = useState(searchQuery.get('key') === null ? "" : searchQuery.get('key'))
   const [error, setError] = useState("")
 
   const topic = useSelector(state => state.searchConfig?.searchKey)

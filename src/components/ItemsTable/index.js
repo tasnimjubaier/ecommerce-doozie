@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types';
-import styles from './index.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
-import { Link, createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import {  createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+
 import { ItemLoadingState } from '../../utils/types';
 import { addItems, setItems, setSearchPhase } from '../../features/Items/itemSlice';
 import { getItems } from '../../service/doozieApi';
 import { filterItems, formatItems } from '../../utils/formatter';
-import { setAllConfig } from '../../features/SearchConfig/searchConfigSlice';
 
+import styles from './index.module.css'
 
 // item :: 
 // headline, shopName, brand, price, reviewAverage, reviewCount

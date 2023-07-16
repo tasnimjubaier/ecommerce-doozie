@@ -1,6 +1,6 @@
 import { SortOptions, SortOrders } from "./types"
 
-
+// comparator function for sorting
 export const getComparator = (sortBy, sortOrder) => (a, b) => {
 
     if(sortBy === SortOptions.None) return 0

@@ -7,6 +7,7 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+// all api calls are in this file
 
 
 export const getItems = async (searchKey, minPrice, maxPrice, sortBy, sortOrder, pageNo) => {

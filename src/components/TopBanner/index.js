@@ -1,13 +1,11 @@
 import React from 'react'
-import styles from './index.module.css'
-import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+
+import styles from './index.module.css'
 
 
 const TopBanner = () => {
     const navigate = useNavigate()
-
-
         
     return (
         <div className={styles['wrapper']}>

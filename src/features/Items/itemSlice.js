@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ItemLoadingState } from "../../utils/types";
 import { getComparator } from "../../utils/comparators";
 
+// this one is for maintaining items in the store
 
 const initialState = {
 	items: [],
