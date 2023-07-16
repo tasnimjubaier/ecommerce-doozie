@@ -23,6 +23,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Skeleton } from '@mui/material'
+import { PageTitleFormatter } from '../../utils/formatter'
 
 
 const Item = (props) => {
@@ -52,6 +53,7 @@ const Item = (props) => {
   if(item === null) {
     return (
       <>
+        <PageTitleFormatter title={itemId} />
         <TopBanner />
         <div className={styles['skeleton']}>
 
@@ -136,7 +138,7 @@ const Item = (props) => {
           </div>
           <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Shipping Overseas: </h5>
-            <h6 title={item?.shipping_overseas}>{item?.shipping_overseas.length > 15 ? item?.shipping_overseas.substring(0, 15) + "..." : item?.shipping_overseas}</h6>
+            <h6 title={item?.shipping_overseas}>{item?.shipping_overseas?.length > 15 ? item?.shipping_overseas?.substring(0, 15) + "..." : item?.shipping_overseas}</h6>
           </div>
           <div className={`${styles['currency']} ${styles['item']}`}>
             <h5>Shop Review Count: </h5>

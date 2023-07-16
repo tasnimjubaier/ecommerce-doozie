@@ -36,7 +36,8 @@ img {
 }
 
 .right {
-    width: 60%;
+    max-width: 60%;
+    overflow: hidden;
     /* background-color: red; */
     min-height: 700px;
     padding-right: 90px;

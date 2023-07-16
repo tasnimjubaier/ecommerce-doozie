@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
 import { Link, createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ItemLoadingState } from '../../utils/types';
-import { setItems, setSearchPhase } from '../../features/Items/itemSlice';
+import { addItems, setItems, setSearchPhase } from '../../features/Items/itemSlice';
 import { getItems } from '../../service/doozieApi';
-import { formatItems } from '../../utils/formatter';
+import { filterItems, formatItems } from '../../utils/formatter';
 import { setAllConfig } from '../../features/SearchConfig/searchConfigSlice';
 
 
@@ -87,6 +87,7 @@ EnhancedTableHead.propTypes = {
 const ItemsTable = () => {
   const items = useSelector(state => state.items?.items)
   const searchPhase = useSelector(state => state.items?.phase)
+  const searchPage = useSelector(state => state.items?.page)
   const [searchConfig, setSearchConfig] = useState(null)
   const [page, setPage] = React.useState(0)
   const rowsPerPage = 10
@@ -98,40 +99,61 @@ const ItemsTable = () => {
 
   useEffect(() => {
     if(searchQuery.size === 0) return 
-    console.log({searchQuery})
     const searchKey = searchQuery.get('key')
     const minPrice = searchQuery.get('min')
     const maxPrice = searchQuery.get('max')
     const sortBy = searchQuery.get('sortBy')
     const sortOrder = searchQuery.get('sortOrder')
-
-    // dispatch(setAllConfig({searchKey, range: [minPrice, maxPrice], sortBy, sortOrder}))
-
+  
     setSearchConfig({searchKey, minPrice, maxPrice, sortBy, sortOrder})
     return () => {}
   }, [searchQuery])
 
+  
 
   useEffect(() => {
     /// api call....
-    console.log({searchConfig})
     if(searchConfig === null) return 
+    
     const fetchData = async () => {
       dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
-      const items = await getItems(searchConfig.searchKey, searchConfig.minPrice, searchConfig.maxPrice, searchConfig.sortBy, searchConfig.sortOrder)
-      const formattedItems = formatItems(items)
-      console.log(formattedItems)
-      dispatch(setItems({items : formattedItems}))
+      const items = await getItems(searchConfig.searchKey, searchConfig.minPrice,
+         searchConfig.maxPrice, searchConfig.sortBy, searchConfig.sortOrder, 1)
+      const formattedItems = formatItems(items, 0)
+      const filteredItems = filterItems(formattedItems, searchConfig, 0)
+      console.log(filteredItems)
+      dispatch(setItems({items : filteredItems}))
       dispatch(setSearchPhase({phase: ItemLoadingState.Searched}))
     }
-    console.log({searchConfig})
-    
+
     fetchData()
 
     return () => {}
   }, [searchConfig])
 
+  useEffect(() => {
+    // check if one page before last page
+    // if it is then api call and update.
+    // if not updated then finish this loop.
+    if(page == 0) return
+    const l = items.length 
+    const r = rowsPerPage * page 
 
+    const fetchNextPageData = async (page) => {
+      dispatch(setSearchPhase({phase: ItemLoadingState.Loading}))
+      const itms = await getItems(searchConfig.searchKey, searchConfig.minPrice, 
+          searchConfig.maxPrice, searchConfig.sortBy, searchConfig.sortOrder, page)
+      const formattedItems = formatItems(itms, items.length)
+      const filteredItems = filterItems(formattedItems, searchConfig, items.length)
+      console.log(filteredItems)
+      dispatch(addItems({items : filteredItems}))
+      dispatch(setSearchPhase({phase: ItemLoadingState.Searched}))
+    }
+    if(l - r < 20) {
+      // api call
+      fetchNextPageData(searchPage + 1)
+    }
+  }, [page])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

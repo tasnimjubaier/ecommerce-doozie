@@ -5,6 +5,7 @@ import { getComparator } from "../../utils/comparators";
 
 const initialState = {
 	items: [],
+	page: 1,
 	phase: ItemLoadingState.NotSearced
 }
 
@@ -14,6 +15,10 @@ const slice = createSlice({
 	reducers: {
         setItems: (state, action) => { // {items}
             state.items = action.payload.items 
+        },
+		addItems: (state, action) => { // {items}
+            state.items = [...state.items, ...action.payload.items]
+			state.page = state.page + 1 
         },
 		setSearchPhase: (state, action) => { // {phase}
             state.phase = action.payload.phase 
@@ -41,5 +46,5 @@ const slice = createSlice({
 	},
 })
 
-export const { setItems, setSearchPhase, sortItems, filterByPrice } = slice.actions
+export const { setItems,addItems, setSearchPhase, sortItems, filterByPrice } = slice.actions
 export default slice.reducer
